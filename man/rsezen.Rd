@@ -4,11 +4,10 @@
 \name{rsezen}
 \alias{rsezen}
 \alias{rsezen-package}
-\title{rwind: A package for processing wind and related data.}
+\title{rsezen: A package for processing data.}
 \description{
-The rwind package provides four categories of important functions:
-\code{\link{deg2comp}}, \code{\link{hd2uv}}, \code{\link{uv2hd}}
-and \code{\link{rotax}}.
+The rsezen package provides the functions below:
+\code{\link{ibicubic}}.
 }
 \section{rsezen functions}{
 
