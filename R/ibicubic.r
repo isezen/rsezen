@@ -78,21 +78,22 @@ ibicubic <- function(x, xlim = NULL, ylim = xlim, dx = NULL, dy = dx, par = T) {
   new_r <- new_xy(r, xlim, dx)
   new_c <- new_xy(c, ylim, dy)
 
-  bic <- function(z) bicubic.grid(r, c, z, xlim, ylim, dx, dy)$z
   l <- length(dim(x))
   if (require(akima)) {
+    bicg <- function(z) akima::bicubic.grid(r, c, z, xlim, ylim, dx, dy)$z
     if (l > 2) {
       if (require(parallel) && par) {
-        cl <- makeCluster(detectCores() - 1)
-        clusterExport(cl, c("r", "c", "xlim", "ylim", "dx", "dy"), envir = environment())
-        clusterEvalQ(cl, library(akima))
-        xi <- parApply(cl, x, (1:l)[-c(1, 2)], bic)
-        stopCluster(cl)
+        cl <- parallel::makeCluster(getOption("cl.cores", detectCores()/2))
+        parallel::clusterExport(cl, c("r", "c", "xlim", "ylim", "dx", "dy"),
+                                envir = environment())
+        parallel::clusterEvalQ(cl, library(akima))
+        xi <- parApply(cl, x, (1:l)[-c(1, 2)], bicg)
+        parallel::stopCluster(cl)
       } else {
-        xi <- apply(x, (1:l)[-c(1,2)], bic)
+        xi <- apply(x, (1:l)[-c(1,2)], bicg)
       }
     } else {
-      xi <- bic(x)
+      xi <- bicg(x)
     }
   } else {
     stop("Install akima package")
