@@ -34,12 +34,11 @@ ibicubic <- function(x, xlim = NULL, ylim = xlim, dx = NULL, dy = dx, par = T) {
   stopifnot( length(dim(x)) > 1 )
 
   Rev <- function(x, margin, ...) {
-    if (!is.array(x))
-      stop("'x' is not an array")
+    if (!is.array(x)) stop("'x' is not an array")
     newdim <- rep("", length(dim(x)))
     newdim[margin] <- paste(dim(x), ":1", sep = "")[margin]
-    z <- eval(parse(text = gettextf("x[%s]", paste(newdim, sep = "",
-                                                   collapse = ","))))
+    z <- eval(parse(text = gettextf("x[%s,drop = F]", paste(newdim, sep = "",
+                                                            collapse = ","))))
     class(z) <- oldClass(x)
     return(z)
   }
@@ -103,7 +102,13 @@ ibicubic <- function(x, xlim = NULL, ylim = xlim, dx = NULL, dy = dx, par = T) {
   dimnames(xi)[[1]] <- new_r
   dimnames(xi)[[2]] <- new_c
   dimnames(xi)[-c(1,2)] <- dimnames(x)[-c(1,2)]
+  names(dimnames(xi)) <- names(dimnames(x))
   if (length(dims)) xi <- Rev(xi, dims)
+
+  # copy attributes
+  attrs <- names(attributes(x))
+  attrs <- attrs[!(attrs %in% c("dim", "dimnames"))]
+  for (a in attrs) attr(xi, a) <- attr(x, a)
   return(xi)
 }
 
