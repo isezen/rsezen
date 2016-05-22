@@ -59,10 +59,10 @@ ibicubic <- function(x, xlim = NULL, ylim = xlim, dx = NULL, dy = dx, par = T) {
     return(list(x = x, dims = dims))
   }
 
-  new_xy <- function(x, xlim, dx) {
+  new_xy <- function(x, lim, dx) {
     rng <- range(x)
-    new_r <- seq(rng[1], rng[2], dx)
-    return(new_r[new_r >= xlim[1] & new_r <= xlim[2]])
+    newn <- seq(rng[1], rng[2], dx)
+    return(newn[newn >= lim[1] & newn <= lim[2]])
   }
 
   x <- set_dim_monoton_inc(x)
@@ -72,11 +72,10 @@ ibicubic <- function(x, xlim = NULL, ylim = xlim, dx = NULL, dy = dx, par = T) {
   c <- as.numeric(dimnames(x)[[2]])
   if (is.null(dx)) dx <- abs((r[2] - r[1]) / 2)
   if (is.null(dy)) dy <- abs((c[2] - c[1]) / 2)
-  if (is.null(xlim)) xlim <- range(r)
   if (is.null(ylim)) ylim <- range(c)
+  if (is.null(xlim)) xlim <- range(r)
   new_r <- new_xy(r, xlim, dx)
   new_c <- new_xy(c, ylim, dy)
-
   l <- length(dim(x))
   if (require(akima)) {
     bicg <- function(z) akima::bicubic.grid(r, c, z, xlim, ylim, dx, dy)$z
@@ -99,8 +98,8 @@ ibicubic <- function(x, xlim = NULL, ylim = xlim, dx = NULL, dy = dx, par = T) {
   }
 
   xi <- array(xi, dim = c(length(new_r), length(new_c), dim(x)[-c(1,2)]))
-  dimnames(xi)[[1]] <- new_r
-  dimnames(xi)[[2]] <- new_c
+  rownames(xi) <- new_r
+  colnames(xi) <- new_c
   dimnames(xi)[-c(1,2)] <- dimnames(x)[-c(1,2)]
   names(dimnames(xi)) <- names(dimnames(x))
   if (length(dims)) xi <- Rev(xi, dims)
@@ -111,4 +110,3 @@ ibicubic <- function(x, xlim = NULL, ylim = xlim, dx = NULL, dy = dx, par = T) {
   for (a in attrs) attr(xi, a) <- attr(x, a)
   return(xi)
 }
-
