@@ -78,7 +78,8 @@ ibicubic <- function(x, xlim = NULL, ylim = xlim, dx = NULL, dy = dx, par = T) {
   new_c <- new_xy(c, ylim, dy)
   l <- length(dim(x))
   if (require(akima)) {
-    bicg <- function(z) akima::bicubic.grid(r, c, z, xlim, ylim, dx, dy)$z
+    bicg <- function(z) akima::bicubic.grid(r, c, z, xlim, ylim,
+                                            dx = dx, dy = dy)$z
     if (l > 2) {
       if (require(parallel) && par) {
         cl <- parallel::makeCluster(getOption("cl.cores", detectCores()/2))
