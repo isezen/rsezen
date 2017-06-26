@@ -45,4 +45,3 @@ xi <- ibicubic(x, xlim = c(4, 6), ylim = c(6, 8))
 str(xi) # note dimnames
 
 }
-
