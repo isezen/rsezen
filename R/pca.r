@@ -2,9 +2,10 @@
 #'
 #' @param r prcomp object
 #' @param d1,d2 An integer for dimension
+#' @param show.var.name Show variable names. Defaulr is \code{TRUE}.
 #'
 #' @export
-biplot <- function(r, d1 = 1, d2 = 2) {
+biplot <- function(r, d1 = 1, d2 = 2, show.var.name = TRUE) {
   r <- r$rotation
   r <- r[, c(d1, d2)]
   mx <- max(abs(range(r[,1])))
@@ -12,7 +13,8 @@ biplot <- function(r, d1 = 1, d2 = 2) {
        xlab = paste0("PC", d1), ylab = paste0("PC", d2))
   abline(v = 0, h = 0, lty = 3)
   arrows(0, 0, r[,1], r[,2], len = 0.1, col = "darkred")
-  # text(1.1 * r, rownames(r), col = "darkred", xpd = TRUE, cex = 1)
+  if (show.var.name) text(1.1 * r, rownames(r), col = "darkred",
+                          xpd = TRUE, cex = 1)
 }
 
 #' Variable Coordinates for prcomp object

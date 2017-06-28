@@ -4,12 +4,14 @@
 \alias{biplot}
 \title{Biplot of a prcomp object}
 \usage{
-biplot(r, d1 = 1, d2 = 2)
+biplot(r, d1 = 1, d2 = 2, show.var.name = TRUE)
 }
 \arguments{
 \item{r}{prcomp object}
 
 \item{d1, d2}{An integer for dimension}
+
+\item{show.var.name}{Show variable names. Defaulr is \code{TRUE}.}
 }
 \description{
 Biplot of a prcomp object
